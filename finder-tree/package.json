@@ -1,0 +1,11 @@
+{
+  "name": "finder-tree",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A file browser where the folder tree is a mossy branch that grows as you open it.",
+  "scripts": {
+    "dev": "bun ./index.html",
+    "build": "bun build ./index.html --outdir=dist --minify"
+  }
+}

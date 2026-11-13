@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Documents</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main class="stage">
+      <section class="window" aria-label="Documents">
+        <header class="titlebar">
+          <div class="lights" aria-hidden="true"><span></span><span></span><span></span></div>
+          <h1 class="titlebar__title">
+            <svg width="17" height="17" viewBox="0 0 17 17" aria-hidden="true">
+              <path d="M1.75 6V3.75a1.5 1.5 0 0 1 1.5-1.5h3.5l1.6 1.75" />
+              <rect x="1.75" y="4" width="13.5" height="10.25" rx="1.75" />
+            </svg>
+            Documents
+          </h1>
+          <div class="titlebar__tools" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 15 15"><path d="m3 3.5 4 4-4 4M8 3.5l4 4-4 4" /></svg>
+            <svg width="15" height="15" viewBox="0 0 15 15"><circle cx="6.5" cy="6.5" r="4.5" /><path d="m10 10 3.5 3.5" /></svg>
+          </div>
+        </header>
+
+        <div class="content">
+          <canvas class="content__canvas" aria-hidden="true"></canvas>
+          <div class="content__world"></div>
+        </div>
+
+        <footer class="statusbar"><span class="statusbar__count" aria-live="polite">0 items</span></footer>
+      </section>
+    </main>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
