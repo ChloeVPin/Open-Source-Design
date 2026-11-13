@@ -9,3 +9,7 @@ Remakes of interface designs I like, rebuilt from scratch and open for anyone to
 ## Credits
 
 The designs here belong to their original creators, credited above. The code in this repository is my own version, remade with Claude Code; it does not include the originals' code or artwork.
+
+## License
+
+The code is released under the [MIT License](LICENSE). That covers the code in this repository only; the original designs remain their creators' work.
