@@ -1,0 +1,272 @@
+:root {
+  color-scheme: light;
+  --page: #fcfcfc;
+  --chrome: #f5f5f5;
+  --paper: #fdfdfd;
+  --label: #6f6f6f;
+  --label-strong: #3a3a3a;
+  --label-open: #a9a9a9;
+  --outline: #b4b4b4;
+  --fit: 1;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Segoe UI', Roboto, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--page);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.stage {
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+/* ------------------------------------------------------------------ window */
+
+.window {
+  width: 891px;
+  flex: none;
+  scale: var(--fit);
+  border-radius: 10px;
+  background: var(--paper);
+  overflow: hidden;
+  box-shadow:
+    0 0 0 0.75px rgb(0 0 0 / 0.14),
+    0 4px 14px rgb(0 0 0 / 0.05),
+    0 26px 64px rgb(0 0 0 / 0.14);
+}
+
+.titlebar {
+  position: relative;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 19px 0 21px;
+  background: var(--chrome);
+  border-bottom: 1px solid #efefef;
+}
+
+.lights {
+  display: flex;
+  gap: 8.5px;
+}
+
+.lights span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #f05a61;
+}
+
+.lights span:nth-child(2) {
+  background: #f3c53c;
+}
+
+.lights span:nth-child(3) {
+  background: #3be64f;
+}
+
+.titlebar__title {
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: #2b2b2b;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+}
+
+.titlebar__title svg {
+  color: #5b5b5b;
+}
+
+.titlebar__tools {
+  display: flex;
+  gap: 21px;
+  color: #7a7a7a;
+}
+
+.titlebar__tools svg {
+  stroke-width: 1.6;
+}
+
+.statusbar {
+  height: 27px;
+  display: grid;
+  place-items: center;
+  background: var(--chrome);
+  color: #a6a6a6;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+}
+
+/* ----------------------------------------------------------------- content */
+
+.content {
+  position: relative;
+  height: 561px;
+  overflow: hidden;
+}
+
+/* The branch is drawn small and scaled up 3×, so every art pixel is a hard square. */
+.content__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+.content__world {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+}
+
+/* ------------------------------------------------------------------- items */
+
+/* An item is anchored by the centre of its icon; the label hangs off it. */
+.item {
+  --half-w: 17px;
+  --half-h: 16px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--label);
+  font: inherit;
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: 0.012em;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: default;
+  translate: calc(var(--half-w) * -1) -50%;
+  transform-origin: var(--half-w) 50%;
+  opacity: 0;
+  scale: 0.6;
+  visibility: hidden;
+  transition:
+    opacity 180ms ease-out,
+    scale 260ms cubic-bezier(0.2, 0.9, 0.3, 1.2),
+    visibility 0s 180ms;
+}
+
+.item.is-visible {
+  opacity: 1;
+  scale: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.item--file {
+  --half-w: 13px;
+}
+
+.item--folder {
+  cursor: pointer;
+}
+
+.item--below {
+  flex-direction: column;
+  gap: 10px;
+  translate: -50% calc(var(--half-h) * -1);
+  transform-origin: 50% var(--half-h);
+}
+
+.item:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 6px;
+  border-radius: 4px;
+}
+
+.item__icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: calc(var(--half-w) * 2);
+  height: calc(var(--half-h) * 2);
+  color: var(--outline);
+}
+
+.icon {
+  grid-area: 1 / 1;
+  overflow: visible;
+}
+
+.icon--hard {
+  display: none;
+  color: #0c0c0c;
+  stroke-width: 2;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  shape-rendering: crispEdges;
+}
+
+.item__label {
+  transition: color 120ms ease-out;
+}
+
+/* Hovered: the icon snaps to its hard black version. */
+.item:not(.is-open):is(:hover, :focus-visible) .icon--rest {
+  display: none;
+}
+
+.item:not(.is-open):is(:hover, :focus-visible) .icon--hover {
+  display: block;
+}
+
+.item:not(.is-open):is(:hover, :focus-visible) .item__label {
+  color: var(--label-strong);
+}
+
+/* Open: the folder icon swings open and its name steps back. */
+.item.is-open .icon--rest {
+  display: none;
+}
+
+.item.is-open .icon--open {
+  display: block;
+}
+
+.item.is-open .item__label {
+  color: var(--label-open);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    transition: none;
+  }
+}
