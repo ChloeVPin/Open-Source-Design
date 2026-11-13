@@ -6,14 +6,19 @@ import { ROOT, UNIT, isText } from './tree.js';
 const VIEW_W = 891; // content area, CSS px — both multiples of PX
 const VIEW_H = 561;
 const START_DELAY = 0.35; // seconds before the first branch starts to grow
-const WITHER_TIME = 0.5; // seconds for a closed folder's branch to die back
-const SETTLE_TIME = 4; // seconds after which a grown branch stops changing
+const WITHER_TIME = 0.7; // seconds for a closed folder's branch to die back
+const SETTLE_TIME = 4.5; // seconds after which a grown branch stops changing
+const PAN_SPEED = 5.2; // spring frequency of the view; higher arrives sooner
 
 const canvas = document.querySelector('.content__canvas');
 const world = document.querySelector('.content__world');
 const count = document.querySelector('.statusbar__count');
 const windowEl = document.querySelector('.window');
-const raster = new Raster(canvas, VIEW_W / PX, VIEW_H / PX);
+// The buffer is one art pixel larger on every side than the view, so it can
+// be slid by a fraction of an art pixel while panning without showing an edge.
+const raster = new Raster(canvas, VIEW_W / PX + 2, VIEW_H / PX + 2);
+canvas.style.width = `${raster.w * PX}px`;
+canvas.style.height = `${raster.h * PX}px`;
 const calm = matchMedia('(prefers-reduced-motion: reduce)');
 
 const params = new URLSearchParams(location.search);
@@ -81,7 +86,7 @@ for (const node of nodes) {
 let now = 0;
 let dirty = true; // something changed, so the picture needs redrawing
 let focus = root;
-const camera = { x: 0, y: 0 };
+const camera = { x: 0, y: 0, vx: 0, vy: 0 };
 
 /** Grow a box to take in a folder's branch, its icon, and the items hanging on the branch. */
 function extend(box, node) {
@@ -172,8 +177,10 @@ function updateItems() {
 }
 
 function render() {
-  // The view moves in whole art pixels so the picture never shimmers.
-  const cx = Math.round(camera.x / PX) * PX, cy = Math.round(camera.y / PX) * PX;
+  // The picture is drawn on a fixed grid of art pixels so its texture never
+  // shimmers; the leftover fraction of a pixel is applied by sliding the canvas.
+  const gx = Math.floor(camera.x / PX) * PX, gy = Math.floor(camera.y / PX) * PX;
+  const cx = gx - PX, cy = gy - PX; // world position of the buffer's corner
   raster.clear();
   let busy = false;
   for (const node of nodes) {
@@ -186,7 +193,8 @@ function render() {
     drawBranch(raster, node.branch, age, life, cx, cy);
   }
   raster.resolve(cx / PX, cy / PX);
-  world.style.transform = `translate(${-cx}px, ${-cy}px)`;
+  canvas.style.transform = `translate3d(${gx - camera.x}px, ${gy - camera.y}px, 0)`;
+  world.style.transform = `translate3d(${-camera.x}px, ${-camera.y}px, 0)`;
   return busy;
 }
 
@@ -195,21 +203,31 @@ function step(dt) {
   now += dt;
   if (!root.open && now >= START_DELAY) open(root);
 
+  // A critically damped spring: the view eases away, glides, and settles
+  // without overshooting, and can be redirected mid-flight without a jolt.
   const goal = frame(focus);
-  const k = calm.matches ? 1 : 1 - Math.exp(-dt * 4.2);
   const dx = goal.x - camera.x, dy = goal.y - camera.y;
-  const moving = Math.abs(dx) > 0.4 || Math.abs(dy) > 0.4;
-  camera.x = moving ? camera.x + dx * k : goal.x;
-  camera.y = moving ? camera.y + dy * k : goal.y;
+  const moving = !calm.matches && (Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05 || Math.abs(camera.vx) > 0.5 || Math.abs(camera.vy) > 0.5);
+  if (moving) {
+    camera.vx += (dx * PAN_SPEED * PAN_SPEED - 2 * PAN_SPEED * camera.vx) * dt;
+    camera.vy += (dy * PAN_SPEED * PAN_SPEED - 2 * PAN_SPEED * camera.vy) * dt;
+    camera.x += camera.vx * dt;
+    camera.y += camera.vy * dt;
+  } else {
+    camera.x = goal.x; camera.y = goal.y;
+    camera.vx = camera.vy = 0;
+  }
   updateItems();
   return moving;
 }
 
 let last = performance.now();
 function tick(time) {
-  const dt = Math.min(0.05, (time - last) / 1000);
+  const elapsed = Math.min(0.1, (time - last) / 1000);
   last = time;
-  const moving = step(dt);
+  // Small fixed sub-steps keep the spring stable and the motion even when a frame runs long.
+  let moving = false;
+  for (let left = elapsed; left > 1e-4; left -= 1 / 120) moving = step(Math.min(1 / 120, left));
   // Once everything has grown in and the view is at rest there is nothing to redraw.
   if (dirty || moving) dirty = render() || moving;
   if (!params.has('freeze')) requestAnimationFrame(tick);
