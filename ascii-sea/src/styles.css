@@ -1,0 +1,391 @@
+/* ------------------------------------------------------------------ tokens */
+
+:root {
+  --cell-w: 8px;
+  --cell-h: 12px;
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+/* haj — sharks on paper */
+:root[data-theme='haj'] {
+  color-scheme: light;
+  --page: #fcfcfc;
+  --grid: rgb(0 0 0 / 0.055);
+  --rays: none;
+
+  --halo-tint: rgb(214 216 207 / 0.42);
+  --halo-blur: 7px;
+  --halo-w: 880px;
+  --halo-h: 560px;
+  --halo-core: 58%;
+
+  --title: #171717;
+  --title-size: 50px;
+  --title-weight: 250;
+  --title-tracking: -0.035em;
+
+  --pill-top: 13px;
+  --pill-height: 37px;
+  --pill-radius: 7px;
+  --pill-bg: #eff0ec;
+  --pill-border: rgb(0 0 0 / 0.07);
+  --pill-shadow: 0 1px 1px rgb(0 0 0 / 0.04), 0 10px 18px -4px rgb(0 0 0 / 0.14);
+  --pill-blur: none;
+  --pill-text: #5e5e5b;
+  --pill-weight: 400;
+
+  --box-radius: 14px;
+  --box-pad-top: 14px;
+  --input-gap: 9px;
+  --box-bg: rgb(226 227 221 / 0.55);
+  --box-border: 1px solid rgb(0 0 0 / 0.09);
+  --box-shadow: none;
+  --box-blur: none;
+  --box-text: #1c1c1c;
+  --placeholder: #a4a5a0;
+  --placeholder-weight: 300;
+  --icon: #3d3d3b;
+  --icon-stroke: 1.5;
+  --hint: #a9aaa6;
+  --hint-weight: 400;
+  --send-bg: #d3d4d2;
+  --send-icon: #6a6a68;
+}
+
+/* honu — turtles in a lagoon */
+:root[data-theme='honu'] {
+  color-scheme: light;
+  --page: linear-gradient(
+    150deg,
+    #adf5e7 0%,
+    #71ded9 19%,
+    #50d5d5 29%,
+    #47d0d4 34%,
+    #3cc9d1 39%,
+    #31bdcf 44%,
+    #2eb7cd 51%,
+    #1499c3 61%,
+    #1390bc 66%,
+    #1383b8 75%,
+    #0b7eb4 82%,
+    #0a7ab0 100%
+  );
+  --grid: rgb(255 255 255 / 0.1);
+  --rays: block;
+
+  --halo-tint: rgb(255 255 255 / 0.4);
+  --halo-blur: 7px;
+  --halo-w: 940px;
+  --halo-h: 470px;
+  --halo-core: 38%;
+
+  --title: #0c3244;
+  --title-size: 48px;
+  --title-weight: 320;
+  --title-tracking: -0.035em;
+
+  --pill-top: 14px;
+  --pill-height: 34px;
+  --pill-radius: 10px;
+  --pill-bg: rgb(255 255 255 / 0.58);
+  --pill-border: rgb(255 255 255 / 0.55);
+  --pill-shadow: 0 6px 16px -6px rgb(6 70 100 / 0.3);
+  --pill-blur: blur(10px);
+  --pill-text: #14394a;
+  --pill-weight: 500;
+
+  --box-radius: 16px;
+  --box-pad-top: 16px;
+  --input-gap: 6px;
+  --box-bg: linear-gradient(100deg, rgb(255 255 255 / 0.68), rgb(255 255 255 / 0.5));
+  --box-border: 1.5px solid rgb(255 255 255 / 0.95);
+  --box-shadow: 0 14px 40px -18px rgb(5 60 95 / 0.45);
+  --box-blur: blur(14px);
+  --box-text: #0c3244;
+  --placeholder: #4c7684;
+  --placeholder-weight: 400;
+  --icon: #21505f;
+  --icon-stroke: 1.9;
+  --hint: #2c5a6b;
+  --hint-weight: 500;
+  --send-bg: rgb(70 140 165 / 0.34);
+  --send-icon: #1c4959;
+}
+
+/* -------------------------------------------------------------------- base */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  background: var(--page);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: var(--icon-stroke);
+}
+
+/* --------------------------------------------------------------------- sea */
+
+.sea,
+.sea > * {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sea__canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Hairlines on every cell boundary; the tiles are inset so these show between them. */
+.sea__grid {
+  background-image:
+    linear-gradient(to right, var(--grid) 0.5px, transparent 0.5px),
+    linear-gradient(to bottom, var(--grid) 0.5px, transparent 0.5px);
+  background-size: var(--cell-w) var(--cell-h);
+}
+
+/* Half-pixel hairlines vanish on 1x screens; fall back to fainter full pixels. */
+@media (resolution < 1.5dppx) {
+  .sea__grid {
+    opacity: 0.6;
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  }
+}
+
+/* Shafts of light falling through the water (honu only). */
+.sea__rays {
+  display: var(--rays);
+  background:
+    linear-gradient(118deg, transparent 18%, rgb(255 255 255 / 0.1) 24%, transparent 31%),
+    linear-gradient(124deg, transparent 38%, rgb(255 255 255 / 0.08) 46%, transparent 55%),
+    linear-gradient(112deg, transparent 60%, rgb(255 255 255 / 0.07) 66%, transparent 72%);
+}
+
+/* The soft pool behind the prompt: whatever swims under it goes out of focus. */
+.sea__halo {
+  inset: auto;
+  left: 50%;
+  top: 50%;
+  width: var(--halo-w);
+  height: var(--halo-h);
+  transform: translate(-50%, -50%);
+  background: var(--halo-tint);
+  -webkit-backdrop-filter: blur(var(--halo-blur));
+  backdrop-filter: blur(var(--halo-blur));
+  -webkit-mask-image: radial-gradient(ellipse closest-side, #000 var(--halo-core), transparent 100%);
+  mask-image: radial-gradient(ellipse closest-side, #000 var(--halo-core), transparent 100%);
+}
+
+/* ------------------------------------------------------------------ topbar */
+
+.topbar {
+  position: fixed;
+  top: var(--pill-top);
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.history {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: var(--pill-height);
+  padding: 0 13px 0 11px;
+  border: 1px solid var(--pill-border);
+  border-radius: var(--pill-radius);
+  background: var(--pill-bg);
+  box-shadow: var(--pill-shadow);
+  -webkit-backdrop-filter: var(--pill-blur);
+  backdrop-filter: var(--pill-blur);
+  color: var(--pill-text);
+  font-size: 11.5px;
+  font-weight: var(--pill-weight);
+  letter-spacing: -0.005em;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 120ms ease-out;
+}
+
+.history:active {
+  transform: scale(0.97);
+}
+
+.history__icon {
+  width: 14px;
+  height: 14px;
+}
+
+.history__chevron {
+  width: 12px;
+  height: 12px;
+  margin-left: 1px;
+  opacity: 0.75;
+}
+
+/* -------------------------------------------------------------------- hero */
+
+.hero {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  pointer-events: none;
+}
+
+.hero__title {
+  margin: 0 0 33px;
+  color: var(--title);
+  font-size: var(--title-size);
+  font-weight: var(--title-weight);
+  letter-spacing: var(--title-tracking);
+  line-height: 31px;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.composer {
+  pointer-events: auto;
+  width: min(623px, 100%);
+  padding: var(--box-pad-top) 10px 10px;
+  border: var(--box-border);
+  border-radius: var(--box-radius);
+  background: var(--box-bg);
+  box-shadow: var(--box-shadow);
+  -webkit-backdrop-filter: var(--box-blur);
+  backdrop-filter: var(--box-blur);
+}
+
+.composer__input {
+  display: block;
+  width: 100%;
+  max-height: 180px;
+  margin: 0 0 var(--input-gap);
+  padding: 0 6px;
+  border: 0;
+  outline: 0;
+  resize: none;
+  background: transparent;
+  color: var(--box-text);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 22px;
+}
+
+.composer__input::placeholder {
+  color: var(--placeholder);
+  font-weight: var(--placeholder-weight);
+  opacity: 1;
+}
+
+.composer__bar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 32px;
+}
+
+.icon-button,
+.send {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--icon);
+  cursor: pointer;
+  transition: background-color 120ms ease-out, transform 120ms ease-out;
+}
+
+.icon-button svg,
+.send svg {
+  width: 18px;
+  height: 18px;
+}
+
+.icon-button:active,
+.send:active {
+  transform: scale(0.94);
+}
+
+.composer__hint {
+  margin-left: auto;
+  margin-right: 12px;
+  color: var(--hint);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--hint-weight);
+  line-height: 1;
+  white-space: pre;
+  user-select: none;
+}
+
+.send {
+  background: var(--send-bg);
+  color: var(--send-icon);
+}
+
+@media (hover: hover) {
+  .icon-button:hover {
+    background: rgb(0 0 0 / 0.06);
+  }
+  .send:hover {
+    filter: brightness(0.96);
+  }
+}
+
+:where(.history, .icon-button, .send):focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--title) 55%, transparent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 520px) {
+  .hero__title {
+    font-size: calc(var(--title-size) * 0.66);
+    line-height: 1.1;
+  }
+  .composer__hint {
+    display: none;
+  }
+  .send {
+    margin-left: auto;
+  }
+}

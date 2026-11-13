@@ -1,0 +1,11 @@
+{
+  "name": "ascii-sea",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A chat prompt floating over a sea of animals drawn as character tiles.",
+  "scripts": {
+    "dev": "bun ./index.html",
+    "build": "bun build ./index.html --outdir=dist --minify"
+  }
+}

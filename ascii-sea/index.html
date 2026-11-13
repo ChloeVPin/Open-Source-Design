@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" data-theme="haj">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>what’s on your mind?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <div class="sea" aria-hidden="true">
+      <div class="sea__rays"></div>
+      <div class="sea__grid"></div>
+      <canvas class="sea__canvas"></canvas>
+      <div class="sea__halo"></div>
+    </div>
+
+    <header class="topbar">
+      <button class="history" type="button" aria-haspopup="menu" aria-expanded="false">
+        <svg class="history__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+          <path d="M3 3v5h5" />
+          <path d="M12 7v5l4 2" />
+        </svg>
+        <span>History</span>
+        <svg class="history__chevron" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+    </header>
+
+    <main class="hero">
+      <h1 class="hero__title">what’s on your mind?</h1>
+
+      <form class="composer" autocomplete="off">
+        <textarea class="composer__input" rows="1" aria-label="Message" placeholder="Ask haj anything..."></textarea>
+        <div class="composer__bar">
+          <button class="icon-button" type="button" aria-label="Add attachment">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14" />
+              <path d="M12 5v14" />
+            </svg>
+          </button>
+          <button class="icon-button" type="button" aria-label="Dictate">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 19v3" />
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+              <rect x="9" y="2" width="6" height="13" rx="3" />
+            </svg>
+          </button>
+          <span class="composer__hint" aria-hidden="true">↵ send · ⇧↵ newline</span>
+          <button class="send" type="submit" aria-label="Send">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 7h10v10" />
+              <path d="M7 17 17 7" />
+            </svg>
+          </button>
+        </div>
+      </form>
+    </main>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
