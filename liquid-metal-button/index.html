@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Liquid metal button</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <!-- The camera scales and slides the composer; the close-up puts the send button dead centre. -->
+    <main class="camera js-camera">
+      <form class="composer js-composer" autocomplete="off">
+        <label class="visually-hidden" for="prompt">Message</label>
+        <input class="composer__input js-input" id="prompt" type="text" placeholder="Ask anything" />
+
+        <div class="composer__tools">
+          <button class="tool" type="button" aria-label="Attach a file">
+            <!-- Lucide "paperclip" (ISC licence) -->
+            <svg class="tool__clip" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m16 6-8.414 8.586a2 2 0 0 0 2.829 2.829l8.414-8.586a4 4 0 1 0-5.657-5.657l-8.379 8.551a6 6 0 1 0 8.485 8.485l8.379-8.551" />
+            </svg>
+          </button>
+          <button class="tool" type="button" aria-label="Improve the prompt">
+            <svg class="tool__sparkles" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6.7 3.4Q7.15 6.25 10 6.7 7.15 7.15 6.7 10 6.25 7.15 3.4 6.7 6.25 6.25 6.7 3.4Z" />
+              <path d="M14.2 7.95Q15 13.5 20.55 14.3 15 15.1 14.2 20.65 13.4 15.1 7.85 14.3 13.4 13.5 14.2 7.95Z" />
+            </svg>
+          </button>
+        </div>
+
+        <button class="send js-send" type="submit" aria-label="Send">
+          <span class="send__body">
+            <canvas class="send__ring js-ring"></canvas>
+            <span class="send__face">
+              <!-- Lucide "arrow-up" (ISC licence) -->
+              <svg class="send__arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m5 12 7-7 7 7" />
+                <path d="M12 19V5" />
+              </svg>
+            </span>
+          </span>
+        </button>
+      </form>
+    </main>
+
+    <button class="view js-view" type="button">Zoom out</button>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

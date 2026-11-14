@@ -1,0 +1,261 @@
+/* ------------------------------------------------------------------ tokens */
+
+:root {
+  color-scheme: dark;
+
+  --page: #1b1b1b;
+  --pill: #000;
+  --icon: #595959;
+  --text: #ededed;
+
+  /* Geometry of the send button, in the composer's own 1x pixels. */
+  --send: 56px;
+  --ring: 2.15px; /* thickness of the metal ring */
+  --rim: 0.58px; /* the faint hairline outside it */
+
+  --font: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+/* -------------------------------------------------------------------- base */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  background: var(--page);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The composer is authored at its real size. The script moves and scales the
+   camera so either the whole thing or just the send button fills the window. */
+.camera {
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  /* No will-change here: it would make the browser paint the composer once at
+     1x and stretch that picture, which blurs everything at this zoom. */
+}
+
+.camera.is-moving {
+  transition: transform 700ms cubic-bezier(0.65, 0, 0.2, 1);
+}
+
+/* ---------------------------------------------------------------- composer */
+
+.composer {
+  display: flex;
+  align-items: center;
+  width: 440px;
+  height: 72px;
+  padding: 8px;
+  border-radius: 36px;
+  background: var(--pill);
+}
+
+.composer__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  margin: 0 12px 0 20px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+
+.composer__input::placeholder {
+  color: var(--icon);
+  opacity: 1;
+}
+
+.composer__tools {
+  display: flex;
+  gap: 1.8px;
+  margin-right: 11.7px;
+}
+
+.tool {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--icon);
+  cursor: pointer;
+  transition: color 150ms ease-out;
+}
+
+.tool__clip {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tool__sparkles {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+@media (hover: hover) {
+  .tool:hover {
+    color: #8a8a8a;
+  }
+}
+
+:where(.tool, .send, .view):focus-visible {
+  outline: 1.5px solid rgb(255 255 255 / 0.55);
+  outline-offset: 2px;
+}
+
+/* -------------------------------------------------------------------- send */
+
+.send {
+  position: relative;
+  flex: none;
+  width: var(--send);
+  height: var(--send);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.send__body {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  transition: transform 140ms ease-out;
+}
+
+.send:active .send__body {
+  transform: scale(0.97);
+}
+
+/* A hairline just outside the metal: lit from above, gone by the lower third. */
+.send__body::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--rim) * -1);
+  border-radius: 50%;
+  background: linear-gradient(rgb(255 255 255 / 0.26), rgb(255 255 255 / 0) 75%);
+}
+
+/* The metal. The canvas is a little larger than the button so the ring's
+   outer edge has room to anti-alias. */
+.send__ring {
+  position: absolute;
+  inset: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  border-radius: 50%;
+  /* Shown only if WebGL 2 is unavailable: a still, plain chrome ring. */
+  background: conic-gradient(from 200deg, #fcfcfc, #c9c9da 18%, #0b0b0d 30%, #0b0b0d 52%, #a9acc0 70%, #fcfcfc);
+  -webkit-mask: radial-gradient(closest-side, transparent calc(100% - 4.15px), #000 calc(100% - 4.15px), #000 calc(100% - 2px), transparent calc(100% - 2px));
+  mask: radial-gradient(closest-side, transparent calc(100% - 4.15px), #000 calc(100% - 4.15px), #000 calc(100% - 2px), transparent calc(100% - 2px));
+}
+
+.send__ring.is-live {
+  background: none;
+  -webkit-mask: none;
+  mask: none;
+}
+
+.send__face {
+  position: absolute;
+  inset: var(--ring);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(#373737, #121212 50%, #030303 66%, #000 76%);
+}
+
+.send__arrow {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: #605f5f;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 180ms ease-out;
+}
+
+/* With something typed, the arrow wakes up. */
+.composer:has(.composer__input:not(:placeholder-shown)) .send__arrow {
+  stroke: #f2f2f2;
+}
+
+/* -------------------------------------------------------------------- view */
+
+.view {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  padding: 7px 12px;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.04);
+  color: #8a8a8a;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 150ms ease-out, background-color 150ms ease-out;
+}
+
+@media (hover: hover) {
+  .view:hover {
+    background: rgb(255 255 255 / 0.08);
+    color: #cfcfcf;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .camera.is-moving {
+    transition: none;
+  }
+}

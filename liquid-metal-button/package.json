@@ -1,0 +1,11 @@
+{
+  "name": "liquid-metal-button",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A chat composer whose send button is ringed with a liquid-metal shader.",
+  "scripts": {
+    "dev": "bun ./index.html",
+    "build": "bun build ./index.html --outdir=dist --minify"
+  }
+}

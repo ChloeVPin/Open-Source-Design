@@ -8,6 +8,7 @@ Remakes of interface designs I like, rebuilt from scratch and open for anyone to
 | [finder-tree](finder-tree/) | A file browser where the folder tree is a mossy, dithered branch that grows when you open a folder and withers when you close it. | Finn Taylor |
 | [contribution-palettes](contribution-palettes/) | A GitHub-style contribution graph with twelve palettes; choosing one sweeps the new colours across the year. | Pratyush |
 | [effort-slider](effort-slider/) | An effort slider with a brain for a thumb. Drag it past Max and the track bursts into a twinkling pixel galaxy. | Ozzy |
+| [liquid-metal-button](liquid-metal-button/) | A chat composer whose send button is ringed with a liquid-metal shader: silver bands with rainbow fringes flowing round a 2px ring. | Brett |
 
 ## Credits
 
