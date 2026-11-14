@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Contribution palettes</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main class="card">
+      <header class="card__head">
+        <h1 class="card__title"><span class="js-total">1,497</span> contributions in the last year</h1>
+        <p class="card__palette js-palette-name" aria-live="polite">GitHub</p>
+      </header>
+
+      <section class="graph" aria-label="Contribution activity">
+        <div class="graph__months js-months" aria-hidden="true"></div>
+        <div class="graph__days" aria-hidden="true"><span>Mon</span><span>Wed</span><span>Fri</span></div>
+        <div class="graph__cells js-cells" role="img"></div>
+      </section>
+
+      <footer class="card__foot">
+        <a class="card__link" href="https://docs.github.com/articles/why-are-my-contributions-not-showing-up-on-my-profile">Learn how we count contributions</a>
+        <div class="legend" aria-hidden="true">
+          <span>Less</span>
+          <i class="cell" data-level="0"></i><i class="cell" data-level="1"></i><i class="cell" data-level="2"></i><i class="cell" data-level="3"></i><i class="cell" data-level="4"></i>
+          <span>More</span>
+        </div>
+      </footer>
+
+      <section class="palettes">
+        <h2 class="palettes__title" id="palette-title">Palette</h2>
+        <div class="palettes__grid js-palettes" role="radiogroup" aria-labelledby="palette-title"></div>
+      </section>
+    </main>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

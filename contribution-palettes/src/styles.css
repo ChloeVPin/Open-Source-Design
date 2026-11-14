@@ -1,0 +1,278 @@
+:root {
+  color-scheme: dark;
+  --page: #0a0b10;
+  --card: #0d0f13;
+  --line: #1f2025;
+  --text: #e8eaed;
+  --text-muted: #8b8f99;
+  --text-faint: #6c707b;
+
+  /* The graph's colours. --l1 … --l4 are swapped when a palette is chosen. */
+  --l0: #161922;
+  --l1: #124b2a;
+  --l2: #0a7c34;
+  --l3: #31ba45;
+  --l4: #46eb56;
+
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 24px 16px;
+  background: var(--page);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* -------------------------------------------------------------------- card */
+
+.card {
+  container-type: inline-size;
+  width: min(1115px, 100%);
+  padding: 39px 40px 38.5px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--card);
+}
+
+.card__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28.5px;
+}
+
+.card__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.card__palette {
+  margin: 0;
+  color: var(--text-faint);
+  font-size: 17px;
+  line-height: 22px;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------- graph */
+
+/*
+  53 weeks across and 7 days down. Cells are fluid: a gap is a quarter of a
+  cell, so 53 cells + 52 gaps = 66 cell-widths fill the track.
+*/
+.graph {
+  --label: 48px;
+  --cell: calc((100cqw - var(--label)) / 66); /* cqw already excludes the card's padding */
+  --gap: calc(var(--cell) / 4);
+  display: grid;
+  grid-template-columns: var(--label) 1fr;
+  grid-template-rows: 18px auto;
+  row-gap: 1px;
+}
+
+.graph__months {
+  grid-column: 2;
+  position: relative;
+  font-size: 15px;
+  line-height: 18px;
+}
+
+.graph__months span {
+  position: absolute;
+  left: calc(var(--col) * (var(--cell) + var(--gap)));
+  white-space: nowrap;
+}
+
+.graph__days {
+  display: grid;
+  grid-template-rows: repeat(7, var(--cell));
+  row-gap: var(--gap);
+  color: var(--text-muted);
+  font-size: 14.4px;
+  line-height: var(--cell);
+}
+
+.graph__days span:nth-child(1) { grid-row: 2; }
+.graph__days span:nth-child(2) { grid-row: 4; }
+.graph__days span:nth-child(3) { grid-row: 6; }
+
+.graph__cells {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, var(--cell));
+  grid-auto-columns: var(--cell);
+  gap: var(--gap);
+}
+
+.cell {
+  display: block;
+  width: var(--cell);
+  height: var(--cell);
+  border-radius: 27%;
+  background-color: var(--l0);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.035);
+}
+
+.cell[data-level='1'] { background-color: var(--l1); }
+.cell[data-level='2'] { background-color: var(--l2); }
+.cell[data-level='3'] { background-color: var(--l3); }
+.cell[data-level='4'] { background-color: var(--l4); }
+
+.cell:not([data-level='0']) {
+  box-shadow: none;
+  /* --delay is set per cell from script, which is what makes the change sweep across. */
+  transition: background-color 210ms ease var(--delay, 0ms);
+}
+
+/* ------------------------------------------------------------------ footer */
+
+.card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 17px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--line);
+  color: var(--text-muted);
+  font-size: 15.2px;
+  line-height: 20px;
+}
+
+.card__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.card__link:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+.legend {
+  --cell: calc((100cqw - 48px) / 66);
+  display: flex;
+  align-items: center;
+  gap: calc(var(--cell) / 4);
+}
+
+.legend span:first-child { margin-right: 1px; }
+.legend span:last-child { margin-left: 1px; }
+
+/* ---------------------------------------------------------------- palettes */
+
+.palettes__title {
+  margin: 31px 0 18px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.palettes__grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 11.2px;
+}
+
+.swatch {
+  display: block;
+  padding: 10.5px 11px 11.5px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-faint);
+  font: inherit;
+  font-size: 14.4px;
+  line-height: 20px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 140ms ease-out,
+    border-color 140ms ease-out,
+    color 140ms ease-out;
+}
+
+.swatch__bars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+  margin-bottom: 10px;
+}
+
+.swatch__bars i {
+  height: 14px;
+  border-radius: 3px;
+}
+
+@media (hover: hover) {
+  .swatch:hover {
+    border-color: #30333c;
+    background: #101218;
+    color: #a3a7b1;
+  }
+}
+
+.swatch[aria-checked='true'] {
+  border-color: #5c5f67;
+  background: #14171f;
+  color: #f2f4f7;
+}
+
+.swatch:focus-visible {
+  outline: 2px solid #8aa0ff;
+  outline-offset: 2px;
+}
+
+.swatch:active {
+  scale: 0.985;
+}
+
+/* -------------------------------------------------------------- responsive */
+
+@container (max-width: 900px) {
+  .palettes__grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+@container (max-width: 640px) {
+  .graph { --label: 0px; }
+  .graph__days { display: none; }
+  .graph__months { font-size: 11px; }
+  .legend { --cell: calc(100cqw / 66); }
+  .palettes__grid { grid-template-columns: repeat(3, 1fr); }
+  .card__link { display: none; }
+  .card__foot { justify-content: flex-end; }
+}
+
+@container (max-width: 420px) {
+  .palettes__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .card { padding: 24px 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cell:not([data-level='0']) { transition: none; }
+}

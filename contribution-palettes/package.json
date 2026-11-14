@@ -1,0 +1,11 @@
+{
+  "name": "contribution-palettes",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A contribution graph you can recolour, with the change sweeping across the year.",
+  "scripts": {
+    "dev": "bun ./index.html",
+    "build": "bun build ./index.html --outdir=dist --minify"
+  }
+}
