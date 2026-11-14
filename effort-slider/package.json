@@ -1,0 +1,11 @@
+{
+  "name": "effort-slider",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "An effort slider with a brain for a thumb; the last stop turns the track into a galaxy.",
+  "scripts": {
+    "dev": "bun ./index.html",
+    "build": "bun build ./index.html --outdir=dist --minify"
+  }
+}

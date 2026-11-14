@@ -1,0 +1,300 @@
+/* ------------------------------------------------------------------ tokens */
+
+:root {
+  color-scheme: dark;
+
+  --page: #101010;
+  --card: #171717;
+  --line: #262626;
+  --track: #262626;
+  --muted: #808080;
+  --text: #ededed;
+  --galaxy-text: #9fd9ff;
+
+  --brain-fill: #f485ba;
+  --brain-line: #5a0d36;
+  --galaxy-line: #220a78;
+
+  /* Geometry of the slider, in the card's own 1x pixels. */
+  --track-w: 196px;
+  --track-h: 20px;
+  --tick-inset: 11px; /* first and last tick from the track's ends */
+  --tick-step: 34.8px;
+
+  --font: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --zoom: 1;
+}
+
+/* -------------------------------------------------------------------- base */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  background: var(--page);
+  color: var(--muted);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* The card is authored at its real size (220px wide) and the stage scales it
+   up; the recording this is modelled on shows it at four times that. */
+.stage {
+  width: 220px;
+  transform: translateY(calc(-2.5px * var(--zoom))) scale(var(--zoom));
+}
+
+/* -------------------------------------------------------------------- card */
+
+.card {
+  position: relative;
+  padding: 11px 11px 10.65px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+  box-shadow: 0 5px 14px rgb(0 0 0 / 0.22);
+}
+
+.card__head {
+  display: flex;
+  align-items: center;
+  gap: 8.5px;
+  height: 19px;
+}
+
+.card__title,
+.card__value {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 19px;
+}
+
+.card__value {
+  position: relative;
+  color: var(--text);
+  white-space: nowrap;
+  transition: color 160ms ease-out;
+}
+
+.card__value.is-galaxy {
+  color: var(--galaxy-text);
+}
+
+/* Each letter of a new label arrives on its own, out of a blur. */
+.label {
+  display: inline-block;
+  white-space: pre;
+}
+
+.label span {
+  display: inline-block;
+  animation: letter-in 150ms cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+  animation-delay: calc(var(--i) * 22ms + 30ms);
+}
+
+.label.is-leaving {
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: label-out 140ms ease-out forwards;
+}
+
+.label.is-leaving span {
+  animation: none;
+}
+
+@keyframes letter-in {
+  from {
+    opacity: 0;
+    filter: blur(2.5px);
+    transform: translateY(2.5px);
+  }
+}
+
+@keyframes label-out {
+  to {
+    opacity: 0;
+    filter: blur(2.5px);
+    transform: translateY(-2px);
+  }
+}
+
+.card__help {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  transform: translateY(-0.5px);
+}
+
+.card__help svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 17.25px;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.hint {
+  position: relative;
+  margin: 6.85px 0 0;
+  white-space: nowrap;
+  font-size: 12px;
+  line-height: 16px;
+  color: #858585;
+}
+
+/* ------------------------------------------------------------------ slider */
+
+.slider {
+  position: relative;
+  width: var(--track-w);
+  height: var(--track-h);
+  margin-top: 10.75px;
+  outline: none;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.slider.is-dragging {
+  cursor: grabbing;
+}
+
+/* A wider target than the 20px track, so it is easy to grab at 1x. */
+.slider::before {
+  content: '';
+  position: absolute;
+  inset: -8px -6px;
+}
+
+.slider:focus-visible .slider__track {
+  outline: 1.5px solid rgb(255 255 255 / 0.45);
+  outline-offset: 2px;
+}
+
+.slider__track {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--track);
+}
+
+.slider__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+}
+
+.slider__mosaic {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.slider__ticks i {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--tick-inset) + var(--i) * var(--tick-step));
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.2);
+  transform: translate(-50%, -50%);
+}
+
+.slider__ticks i.is-recommended {
+  /* Same dot as the other stops, a touch brighter; the label below names it. */
+  background: rgb(255 255 255 / 0.3);
+}
+
+/* ------------------------------------------------------------------- thumb */
+
+.thumb {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  margin: -11.4px 0 0 -12px;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* A faint cool glow that builds as the effort goes up. */
+.thumb::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(150 160 255 / 0.07), transparent);
+  opacity: var(--glow, 0);
+}
+
+.brain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: var(--brain-fill);
+  stroke: var(--brain-line);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.brain--galaxy {
+  fill: url(#brain-galaxy);
+  stroke: var(--galaxy-line);
+  opacity: 0;
+}
+
+/* ---------------------------------------------------------------------- fx */
+
+/* Flash, sparks and rays are drawn here; it overhangs the card so the rays
+   can run past its edge. */
+.fx {
+  position: absolute;
+  left: -48px;
+  top: -48px;
+  width: calc(100% + 96px);
+  height: calc(100% + 96px);
+  pointer-events: none;
+}
