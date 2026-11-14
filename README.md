@@ -9,6 +9,7 @@ Remakes of interface designs I like, rebuilt from scratch and open for anyone to
 | [contribution-palettes](contribution-palettes/) | A GitHub-style contribution graph with twelve palettes; choosing one sweeps the new colours across the year. | Pratyush |
 | [effort-slider](effort-slider/) | An effort slider with a brain for a thumb. Drag it past Max and the track bursts into a twinkling pixel galaxy. | Ozzy |
 | [liquid-metal-button](liquid-metal-button/) | A chat composer whose send button is ringed with a liquid-metal shader: silver bands with rainbow fringes flowing round a 2px ring. | Brett |
+| [canal-street](canal-street/) | A canal-side street of old Japanese shops in fine line art that lives through a full day and night every thirty seconds, with walkers, cyclists, a boat and lit windows. | Dhruv |
 
 ## Credits
 

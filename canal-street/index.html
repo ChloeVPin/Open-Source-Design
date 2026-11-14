@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Canal street</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&display=swap" />
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main class="card js-card">
+      <svg class="scene js-scene" viewBox="0 0 1804 902" role="img" aria-label="A canal-side street of old Japanese shops, drawn in line, passing from day to night"></svg>
+      <p class="clock"><span class="clock__time js-time">07:15</span><span class="clock__period js-period">朝</span></p>
+    </main>
+
+    <div class="timeline js-timeline">
+      <button class="timeline__button timeline__play js-play" type="button" data-state="playing" aria-label="Pause the day">
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <path class="icon-pause" d="M5 3.5v9M11 3.5v9" />
+          <path class="icon-play" d="M5.5 3.2v9.6l7.4-4.8z" />
+        </svg>
+      </button>
+      <div class="timeline__track js-track" role="slider" tabindex="0" aria-label="Time of day" aria-valuemin="0" aria-valuemax="1439" aria-valuenow="435">
+        <span class="timeline__ticks" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="timeline__thumb js-thumb"></span>
+      </div>
+      <button class="timeline__button timeline__now js-now" type="button" aria-pressed="false" title="Follow the real time">今</button>
+    </div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

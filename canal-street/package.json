@@ -1,0 +1,11 @@
+{
+  "name": "canal-street",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A canal-side street of old Japanese shops in line art, living through a day and a night.",
+  "scripts": {
+    "dev": "bun ./index.html",
+    "build": "bun build ./index.html --outdir=dist --minify"
+  }
+}
