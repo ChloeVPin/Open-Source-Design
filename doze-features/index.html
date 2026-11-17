@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Doze: everything happens while you're not looking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500&display=swap" />
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main class="showcase js-showcase">
+      <div class="showcase__copy">
+        <h1 class="showcase__title">Everything happens<br />while you’re not looking.</h1>
+
+        <!-- The list is filled in by main.js from src/features.js. -->
+        <div class="features js-features">
+          <div class="features__box js-box" aria-hidden="true"><i class="features__bar js-bar"></i></div>
+          <ul class="features__list js-list"></ul>
+        </div>
+      </div>
+
+      <div class="panel js-panel">
+        <canvas class="panel__dots js-dots" aria-hidden="true"></canvas>
+        <div class="notice js-notice" aria-live="polite"></div>
+      </div>
+    </main>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

@@ -10,6 +10,7 @@ Remakes of interface designs I like, rebuilt from scratch and open for anyone to
 | [effort-slider](effort-slider/) | An effort slider with a brain for a thumb. Drag it past Max and the track bursts into a twinkling pixel galaxy. | Ozzy |
 | [liquid-metal-button](liquid-metal-button/) | A chat composer whose send button is ringed with a liquid-metal shader: silver bands with rainbow fringes flowing round a 2px ring. | Brett |
 | [canal-street](canal-street/) | A canal-side street of old Japanese shops in fine line art that lives through a full day and night every thirty seconds, with walkers, cyclists, a boat and lit windows. | Dhruv |
+| [doze-features](doze-features/) | A feature showcase that plays itself: a list that advances on a timer beside a coloured panel of notifications and scrambling dots. | Shlok Negi |
 
 ## Credits
 

@@ -1,0 +1,11 @@
+{
+  "name": "doze-features",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A feature showcase that plays itself: a list that advances on a timer beside a panel of notifications and scrambling dots.",
+  "scripts": {
+    "dev": "bun ./index.html",
+    "build": "bun build ./index.html --outdir=dist --minify"
+  }
+}
