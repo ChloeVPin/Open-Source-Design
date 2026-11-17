@@ -68,6 +68,14 @@ async function start() {
 
   if (frozen) {
     sea.render(t);
+    // Handy for capturing frames: sea.step(1 / 30) moves on and redraws.
+    window.sea = {
+      step(seconds) {
+        advance(seconds);
+        sea.render(t);
+        return t;
+      },
+    };
     return;
   }
 
